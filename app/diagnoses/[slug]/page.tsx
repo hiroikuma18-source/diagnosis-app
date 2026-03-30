@@ -13,10 +13,25 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const diagnosis = diagnoses.find((item) => item.slug === slug);
+  const title = diagnosis?.seoTitle || "診断ページ";
+  const description = diagnosis?.seoDescription || "診断コンテンツです";
+  const url = `https://diagnosis-app-xi.vercel.app/diagnoses/${slug}`;
 
   return {
-    title: diagnosis?.seoTitle || "診断ページ",
-    description: diagnosis?.seoDescription || "診断コンテンツです",
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url,
+      siteName: "診断サイト",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

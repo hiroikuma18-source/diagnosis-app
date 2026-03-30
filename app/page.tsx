@@ -1,32 +1,49 @@
 import Link from "next/link";
 import { diagnoses } from "./lib/diagnoses";
 
-const categoryLabels: Record<string, string> = {
-  "personality-type": "性格診断",
-  "sidejob-type": "副業診断",
-  "strength-type": "強み診断",
-};
+const categories = [
+  {
+    key: "personality",
+    label: "性格診断",
+    description: "自分の性格タイプや行動パターンを知る",
+    color: "bg-rose-50 text-rose-500",
+  },
+  {
+    key: "sidejob",
+    label: "副業診断",
+    description: "あなたに向いている副業の種類がわかる",
+    color: "bg-sky-50 text-sky-500",
+  },
+  {
+    key: "strength",
+    label: "強み診断",
+    description: "自分の得意分野や活かし方を発見する",
+    color: "bg-emerald-50 text-emerald-600",
+  },
+];
 
 export default function Home() {
   return (
     <main className="bg-gradient-to-b from-rose-50 via-white to-sky-50">
-      <section className="px-4 pt-12 pb-10">
+
+      {/* ヒーロー */}
+      <section className="px-4 pt-14 pb-12">
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
               <p className="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">
-                1分でわかる無料診断サイト
+                累計3種類の無料診断が揃う診断サイト
               </p>
 
               <h1 className="mb-5 text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl">
-                自分に合うタイプが見つかる
+                性格・強み・副業タイプが
                 <br />
-                やさしい診断サイト
+                1分でわかる無料診断サイト
               </h1>
 
-              <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
-                性格・強み・向いている副業などを、簡単な質問に答えるだけで診断できます。
-                迷ったときや、自分を知りたいときに気軽に試せるコンテンツを集めました。
+              <p className="max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
+                簡単な質問に答えるだけで、あなたの性格・強み・向いている副業がわかります。
+                シェアして友達と比べてみよう。
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -34,14 +51,13 @@ export default function Home() {
                   href="/diagnoses/personality-type"
                   className="inline-flex items-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
                 >
-                  人気の性格診断をはじめる
+                  無料で診断する（1分）
                 </Link>
-
                 <Link
-                  href="/diagnoses/strength-type"
+                  href="#diagnoses"
                   className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-50"
                 >
-                  強み診断を見る
+                  診断一覧を見る
                 </Link>
               </div>
             </div>
@@ -50,7 +66,6 @@ export default function Home() {
               <p className="mb-4 text-sm font-semibold text-slate-500">
                 人気の診断
               </p>
-
               <div className="space-y-4">
                 {diagnoses.slice(0, 3).map((d, index) => (
                   <Link
@@ -66,11 +81,9 @@ export default function Home() {
                         {d.durationLabel}
                       </span>
                     </div>
-
-                    <h2 className="mb-2 text-base font-semibold text-slate-900">
+                    <h2 className="mb-1 text-base font-semibold text-slate-900">
                       {d.title}
                     </h2>
-
                     <p className="text-sm leading-6 text-slate-600">
                       {d.description}
                     </p>
@@ -82,9 +95,43 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 pb-16">
+      {/* カテゴリ */}
+      <section className="px-4 py-10 bg-white">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-6 flex items-end justify-between gap-4">
+          <div className="mb-6">
+            <p className="mb-2 text-sm font-semibold text-rose-500">CATEGORY</p>
+            <h2 className="text-2xl font-bold text-slate-900">
+              カテゴリから探す
+            </h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {categories.map((cat) => (
+              <Link
+                key={cat.key}
+                href={`/category/${cat.key}`}
+                className="group rounded-[24px] bg-slate-50 p-6 ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <span
+                  className={`mb-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${cat.color}`}
+                >
+                  {cat.label}
+                </span>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {cat.description}
+                </p>
+                <p className="mt-3 text-sm font-semibold text-slate-900 transition group-hover:text-rose-500">
+                  一覧を見る →
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 診断一覧 */}
+      <section id="diagnoses" className="px-4 py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 flex items-end justify-between gap-4">
             <div>
               <p className="mb-2 text-sm font-semibold text-rose-500">
                 DIAGNOSES
@@ -107,11 +154,9 @@ export default function Home() {
               >
                 <div className="mb-4 flex items-center justify-between">
                   <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-500">
-                    {categoryLabels[d.slug] || "診断"}
+                    {d.categoryLabel}
                   </span>
-                  <span className="text-xs text-slate-400">
-                    No.{index + 1}
-                  </span>
+                  <span className="text-xs text-slate-400">No.{index + 1}</span>
                 </div>
 
                 <h3 className="mb-3 text-xl font-semibold leading-8 text-slate-900 transition group-hover:text-rose-500">
@@ -134,14 +179,15 @@ export default function Home() {
                   </span>
                 </div>
 
-                <div className="text-sm font-semibold text-slate-900">
-                  診断をはじめる →
+                <div className="text-sm font-semibold text-rose-500">
+                  無料で診断する →
                 </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
+
     </main>
   );
 }
