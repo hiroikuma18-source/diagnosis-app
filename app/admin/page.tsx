@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
+
+export const dynamic = "force-dynamic";
 import { deleteDiagnosis } from "./actions";
 import DeleteButton from "./components/DeleteButton";
 import ExportButton from "./components/ExportButton";
