@@ -103,7 +103,10 @@ export async function getDiagnoses(): Promise<DiagnosisSummary[]> {
     .select("id, slug, category, category_label, title, description, question_count_label, duration_label, display_order")
     .order("display_order");
 
-  if (error) return [];
+  if (error) {
+    console.error("getDiagnoses error:", error);
+    return [];
+  }
 
   return (data ?? []).map((d) => ({
     id: d.id,
