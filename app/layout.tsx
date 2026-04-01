@@ -1,5 +1,6 @@
 import "./globals.css";
 import Link from "next/link";
+import Script from "next/script";
 
 export const metadata = {
   title: "診断サイト｜性格・強み・副業タイプが1分でわかる",
@@ -17,6 +18,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-GLSJZ2TQDN"
+        strategy="afterInteractive"
+      />
+      <Script id="ga-init" strategy="afterInteractive">{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GLSJZ2TQDN');
+      `}</Script>
       <body className="min-h-screen bg-slate-50 text-slate-900">
         <div className="flex min-h-screen flex-col">
           <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">

@@ -1,23 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
-import { diagnoses } from "../../lib/diagnoses";
 import { calculateResult } from "../../lib/diagnosis-utils";
 import QuestionRenderer from "../../components/QuestionRenderer";
 import ResultRenderer from "../../components/ResultRenderer";
 import Link from "next/link";
+import type { Diagnosis, DiagnosisSummary } from "../../lib/types";
 
-export default function DiagnosisClient() {
-  const params = useParams();
-  const slug = params.slug as string;
+interface Props {
+  diagnosis: Diagnosis | null;
+  otherDiagnoses: DiagnosisSummary[];
+}
 
+export default function DiagnosisClient({ diagnosis, otherDiagnoses }: Props) {
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>[]>([]);
   const [resultLabel, setResultLabel] = useState<string | null>(null);
-
-  const diagnosis = diagnoses.find((item) => item.slug === slug);
 
   if (!diagnosis) {
     return (
@@ -34,19 +33,25 @@ export default function DiagnosisClient() {
   if (resultLabel) {
     const detail = diagnosis.results[resultLabel] ?? {
       description: "バランスがよく、柔軟に対応できるタイプです。",
-      reason: "複数の特性がバランスよく組み合わさっています。",
-      strengths: [
-        "柔軟性がある",
-        "バランス感覚に優れている",
-        "幅広い状況に対応できる",
+      reasons: ["複数の特性がバランスよく組み合わさっています"],
+      failurePattern: "特定のパターンはありません。",
+      sevenDayPlan: [
+        "Day1: 自分の強みを書き出す",
+        "Day2: 得意なことを1つ試す",
+        "Day3: 苦手なことを把握する",
+        "Day4: 得意を伸ばす方法を調べる",
+        "Day5: 小さく実践する",
+        "Day6: 振り返る",
+        "Day7: 次の7日間の計画を立てる",
       ],
-      weaknesses: [
-        "突出した強みを見つけにくいことも",
-        "方向性に迷うことも",
-      ],
-      suitableOptions: ["幅広い職種・分野"],
-      nextStep:
-        "様々な経験を積んで、自分の得意を見つけていこう。",
+      actionOptions: {
+        free: "今日から日記をつけて自己理解を深める",
+        lowCost: "強みに関する本を1冊読む",
+        fastest: "副業プラットフォームに登録してみる",
+      },
+      serviceProposal: {
+        description: "あなたに合うサービスを探してみよう",
+      },
     };
 
     return (
@@ -54,6 +59,7 @@ export default function DiagnosisClient() {
         resultLabel={resultLabel}
         detail={detail}
         diagnosis={diagnosis}
+        otherDiagnoses={otherDiagnoses}
         onRetry={() => {
           setStarted(false);
           setStep(0);
@@ -73,15 +79,12 @@ export default function DiagnosisClient() {
               <p className="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">
                 無料診断コンテンツ
               </p>
-
               <h1 className="mb-5 text-4xl font-bold leading-tight tracking-tight text-slate-900">
                 {diagnosis.title}
               </h1>
-
               <p className="max-w-2xl text-base leading-8 text-slate-600">
                 {diagnosis.description}
               </p>
-
               <div className="mt-6 flex flex-wrap gap-3">
                 <span className="rounded-full bg-white px-4 py-2 text-sm text-slate-500 ring-1 ring-slate-200">
                   質問数: {diagnosis.questionCountLabel}
@@ -93,7 +96,6 @@ export default function DiagnosisClient() {
                   無料
                 </span>
               </div>
-
               <div className="mt-8">
                 <button
                   onClick={() => setStarted(true)}
@@ -111,9 +113,7 @@ export default function DiagnosisClient() {
               </h2>
               <p className="mb-6 text-sm leading-7 text-slate-600">
                 直感で答えられる質問だけなので、気軽に診断できます。
-                今の自分のタイプを知りたいときにぴったりです。
               </p>
-
               <div className="space-y-3">
                 <div className="rounded-2xl bg-rose-50 px-4 py-4 text-sm text-slate-700">
                   やさしい質問設計
@@ -122,26 +122,30 @@ export default function DiagnosisClient() {
                   スマホでも見やすい
                 </div>
                 <div className="rounded-2xl bg-amber-50 px-4 py-4 text-sm text-slate-700">
-                  強み・弱みまで詳しくわかる
+                  失敗パターン・7日間プランまでわかる
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 rounded-[28px] bg-white p-6 ring-1 ring-slate-200">
-            <p className="mb-4 text-sm font-semibold text-slate-500">他の診断も見てみよう</p>
-            <div className="flex flex-wrap gap-3">
-              {diagnoses.filter((d) => d.slug !== slug).map((d) => (
-                <Link
-                  key={d.slug}
-                  href={`/diagnoses/${d.slug}`}
-                  className="rounded-full bg-slate-50 px-4 py-2 text-sm text-slate-600 ring-1 ring-slate-200 transition hover:bg-rose-50 hover:text-rose-500"
-                >
-                  {d.title}
-                </Link>
-              ))}
+          {otherDiagnoses.length > 0 && (
+            <div className="mt-10 rounded-[28px] bg-white p-6 ring-1 ring-slate-200">
+              <p className="mb-4 text-sm font-semibold text-slate-500">
+                他の診断も見てみよう
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {otherDiagnoses.map((d) => (
+                  <Link
+                    key={d.slug}
+                    href={`/diagnoses/${d.slug}`}
+                    className="rounded-full bg-slate-50 px-4 py-2 text-sm text-slate-600 ring-1 ring-slate-200 transition hover:bg-rose-50 hover:text-rose-500"
+                  >
+                    {d.title}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
     );
@@ -159,7 +163,6 @@ export default function DiagnosisClient() {
           onAnswer={(scores) => {
             const newAnswers = [...answers, scores];
             setAnswers(newAnswers);
-
             if (step + 1 < diagnosis.questions.length) {
               setStep(step + 1);
             } else {

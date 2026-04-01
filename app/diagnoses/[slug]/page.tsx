@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
-import { diagnoses } from "../../lib/diagnoses";
+import { getDiagnosisBySlug, getDiagnoses } from "../../lib/db";
 import DiagnosisClient from "./DiagnosisClient";
 
 type PageProps = {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const diagnosis = diagnoses.find((item) => item.slug === slug);
+  const diagnosis = await getDiagnosisBySlug(slug);
   const title = diagnosis?.seoTitle || "診断ページ";
   const description = diagnosis?.seoDescription || "診断コンテンツです";
   const url = `https://diagnosis-app-xi.vercel.app/diagnoses/${slug}`;
@@ -35,6 +31,13 @@ export async function generateMetadata({
   };
 }
 
-export default function DiagnosisPage() {
-  return <DiagnosisClient />;
+export default async function DiagnosisPage({ params }: PageProps) {
+  const { slug } = await params;
+  const [diagnosis, allDiagnoses] = await Promise.all([
+    getDiagnosisBySlug(slug),
+    getDiagnoses(),
+  ]);
+  const otherDiagnoses = allDiagnoses.filter((d) => d.slug !== slug);
+
+  return <DiagnosisClient diagnosis={diagnosis} otherDiagnoses={otherDiagnoses} />;
 }

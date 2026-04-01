@@ -13,12 +13,18 @@ export interface Question {
 
 export interface ResultDetail {
   description: string;
-  reason: string;
-  strengths: string[];
-  weaknesses: string[];
-  suitableOptions: string[];
-  nextStep: string;
-  affiliateLink?: string;
+  reasons: string[];
+  failurePattern: string;
+  sevenDayPlan: string[];
+  actionOptions: {
+    free: string;
+    lowCost: string;
+    fastest: string;
+  };
+  serviceProposal: {
+    description: string;
+    affiliateLink?: string;
+  };
 }
 
 export interface Diagnosis {
@@ -34,4 +40,17 @@ export interface Diagnosis {
   questions: Question[];
   resultMap: Record<string, string>;
   results: Record<string, ResultDetail>;
+}
+
+// Supabase から取得する軽量版（一覧表示用）
+export interface DiagnosisSummary {
+  id: string;
+  slug: string;
+  category: DiagnosisCategory;
+  categoryLabel: string;
+  title: string;
+  description: string;
+  questionCountLabel: string;
+  durationLabel: string;
+  displayOrder: number;
 }
