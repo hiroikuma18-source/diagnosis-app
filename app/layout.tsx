@@ -7,7 +7,7 @@ export const metadata = {
   description:
     "簡単な質問に答えるだけで、あなたの性格タイプ・強み・向いている副業がわかります。",
   verification: {
-    google: "2F-XqYZ7isxJJUVpGcKg68Vk0hVYeC0szR2mvbzcGCw",
+    google: "fL-RO9sGsLc2mmlK8UaDNm82gPR-nLg5HFnftyN6vJc",
   },
 };
 
