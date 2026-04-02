@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 import { deleteDiagnosis } from "./actions";
 import DeleteButton from "./components/DeleteButton";
 import ExportButton from "./components/ExportButton";
+import AnalyticsStats from "./components/AnalyticsStats";
 
 export default async function AdminPage() {
   const { data: diagnoses } = await supabase
@@ -61,6 +62,7 @@ export default async function AdminPage() {
                 <span className="ml-3 text-xs text-emerald-600">
                   完了数: {completionCounts[d.id] ?? 0}
                 </span>
+                <AnalyticsStats slug={d.slug} />
               </div>
               <div className="flex items-center gap-2">
                 <Link
