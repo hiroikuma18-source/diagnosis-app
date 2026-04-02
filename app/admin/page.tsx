@@ -12,6 +12,15 @@ export default async function AdminPage() {
     .select("id, slug, title, category_label, display_order")
     .order("display_order");
 
+  const { data: completions } = await supabase
+    .from("diagnosis_completions")
+    .select("diagnosis_id");
+
+  const completionCounts: Record<string, number> = {};
+  for (const c of completions ?? []) {
+    completionCounts[c.diagnosis_id] = (completionCounts[c.diagnosis_id] ?? 0) + 1;
+  }
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -49,6 +58,9 @@ export default async function AdminPage() {
                 </span>
                 <span className="text-base font-medium text-slate-900">{d.title}</span>
                 <span className="ml-3 text-xs text-slate-400">/{d.slug}</span>
+                <span className="ml-3 text-xs text-emerald-600">
+                  完了数: {completionCounts[d.id] ?? 0}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Link
