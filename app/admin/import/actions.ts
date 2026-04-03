@@ -23,14 +23,16 @@ export async function importDiagnosis(formData: FormData): Promise<ImportResult>
   try {
     // 更新モード: 既存データを削除してから再登録
     if (mode === "update") {
-      const { data: existing } = await db
+      const { data: existing, error: findError } = await db
         .from("diagnoses")
         .select("id")
         .eq("slug", data.slug)
         .single();
 
+      if (findError) console.error("find error:", findError);
+
       if (!existing) {
-        return { success: false, error: `slug「${data.slug}」の診断が見つかりません。新規作成モードを使ってください。` };
+        return { success: false, error: `slug「${data.slug}」の診断が見つかりません。新規作成モードを使ってください。（詳細: ${findError?.message ?? "不明"}）` };
       }
 
       // 関連データを全削除（CASCADE で questions/choices/result_types も消える）
