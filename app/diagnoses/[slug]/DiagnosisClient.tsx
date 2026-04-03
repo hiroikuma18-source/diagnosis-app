@@ -111,18 +111,21 @@ export default function DiagnosisClient({ diagnosis, otherDiagnoses }: Props) {
               <h2 className="mb-4 text-2xl font-bold text-slate-900">
                 1分でサクッとわかる
               </h2>
+              <p className="mb-2 text-sm leading-7 text-slate-600">
+                直感で答えるだけでOK。
+              </p>
               <p className="mb-6 text-sm leading-7 text-slate-600">
-                直感で答えられる質問だけなので、気軽に診断できます。
+                迷っている時間をなくして、今すぐ動けます。
               </p>
               <div className="space-y-3">
                 <div className="rounded-2xl bg-rose-50 px-4 py-4 text-sm text-slate-700">
-                  やさしい質問設計
+                  初心者でもすぐ始められる
                 </div>
                 <div className="rounded-2xl bg-sky-50 px-4 py-4 text-sm text-slate-700">
-                  スマホでも見やすい
+                  登録不要
                 </div>
                 <div className="rounded-2xl bg-amber-50 px-4 py-4 text-sm text-slate-700">
-                  失敗パターン・7日間プランまでわかる
+                  失敗しないための具体ステップまでわかる
                 </div>
               </div>
             </div>
