@@ -10,7 +10,8 @@ export async function GET() {
       return NextResponse.json({ error: "env not set" }, { status: 500 });
     }
 
-    const credentials = JSON.parse(serviceAccountJson);
+    const decoded = Buffer.from(serviceAccountJson, "base64").toString("utf-8");
+    const credentials = JSON.parse(decoded);
     const client = new BetaAnalyticsDataClient({ credentials });
 
     const [response] = await client.runReport({
