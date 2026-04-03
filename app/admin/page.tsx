@@ -28,6 +28,12 @@ export default async function AdminPage() {
         <h1 className="text-2xl font-bold text-slate-900">診断一覧</h1>
         <div className="flex gap-2">
           <Link
+            href="/admin/affiliates"
+            className="rounded-full bg-violet-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+          >
+            アフィリエイト
+          </Link>
+          <Link
             href="/admin/import"
             className="rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
           >

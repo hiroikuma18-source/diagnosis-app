@@ -129,3 +129,13 @@ export async function deleteResultType(resultTypeId: string, diagnosisId: string
   revalidatePath(`/admin/diagnoses/${diagnosisId}/results`);
   redirect(`/admin/diagnoses/${diagnosisId}/results`);
 }
+
+export async function updateAffiliateLink(resultTypeId: string, affiliateLink: string) {
+  const db = getAdminClient();
+  const { error } = await db
+    .from("result_types")
+    .update({ affiliate_link: affiliateLink || null })
+    .eq("id", resultTypeId);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/affiliates");
+}
