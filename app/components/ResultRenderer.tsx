@@ -100,7 +100,7 @@ export default function ResultRenderer({
         {/* ⑥ サービス提案 */}
         <div className="rounded-[28px] bg-gradient-to-br from-rose-50 to-sky-50 p-6 ring-1 ring-slate-200">
           <p className="mb-2 text-sm font-semibold text-slate-500">
-            このタイプにおすすめのサービス
+            {detail.serviceProposal.title || "このタイプにおすすめのサービス"}
           </p>
           <p className="mb-4 text-base leading-7 text-slate-800">
             {detail.serviceProposal.description}

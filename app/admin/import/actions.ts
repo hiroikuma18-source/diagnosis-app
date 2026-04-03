@@ -99,6 +99,7 @@ export async function importDiagnosis(formData: FormData): Promise<ImportResult>
         action_free: r.actionFree ?? "",
         action_low_cost: r.actionLowCost ?? "",
         action_fastest: r.actionFastest ?? "",
+        service_title: r.serviceTitle ?? "",
         service_description: r.serviceDescription ?? "",
         affiliate_link: r.affiliateLink || null,
       });

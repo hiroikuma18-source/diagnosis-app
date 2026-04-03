@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       slug, category, category_label, title, description,
       seo_title, seo_description, question_count_label, duration_label, display_order,
       questions(id, display_order, text, choices(display_order, text, scores)),
-      result_types(score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_description, affiliate_link)
+      result_types(score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_title, service_description, affiliate_link)
     `)
     .eq("id", id)
     .single();
@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
     actionFree: r.action_free,
     actionLowCost: r.action_low_cost,
     actionFastest: r.action_fastest,
+    serviceTitle: r.service_title,
     serviceDescription: r.service_description,
     affiliateLink: r.affiliate_link,
   }));

@@ -22,6 +22,7 @@ export interface ResultDetail {
     fastest: string;
   };
   serviceProposal: {
+    title?: string;
     description: string;
     affiliateLink?: string;
   };
