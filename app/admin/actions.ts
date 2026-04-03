@@ -130,11 +130,15 @@ export async function deleteResultType(resultTypeId: string, diagnosisId: string
   redirect(`/admin/diagnoses/${diagnosisId}/results`);
 }
 
-export async function updateAffiliateLink(resultTypeId: string, affiliateLink: string, serviceTitle: string) {
+export async function updateAffiliateLink(resultTypeId: string, affiliateLink: string, serviceTitle: string, affiliateBanner: string) {
   const db = getAdminClient();
   const { error } = await db
     .from("result_types")
-    .update({ affiliate_link: affiliateLink || null, service_title: serviceTitle })
+    .update({
+      affiliate_link: affiliateLink || null,
+      service_title: serviceTitle,
+      affiliate_banner: affiliateBanner,
+    })
     .eq("id", resultTypeId);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/affiliates");

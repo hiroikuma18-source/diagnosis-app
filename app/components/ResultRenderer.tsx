@@ -105,7 +105,11 @@ export default function ResultRenderer({
           <p className="mb-4 text-base leading-7 text-slate-800">
             {detail.serviceProposal.description}
           </p>
-          {detail.serviceProposal.affiliateLink && (
+          {detail.serviceProposal.affiliateBanner ? (
+            <div
+              dangerouslySetInnerHTML={{ __html: detail.serviceProposal.affiliateBanner }}
+            />
+          ) : detail.serviceProposal.affiliateLink ? (
             <a
               href={detail.serviceProposal.affiliateLink}
               target="_blank"
@@ -114,7 +118,7 @@ export default function ResultRenderer({
             >
               今すぐチェックする（無料）
             </a>
-          )}
+          ) : null}
         </div>
 
         {/* シェア */}

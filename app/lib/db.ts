@@ -15,6 +15,7 @@ type RawResultType = {
   service_title: string;
   service_description: string;
   affiliate_link: string | null;
+  affiliate_banner: string;
 };
 
 type RawChoice = {
@@ -61,6 +62,7 @@ function toResultDetail(r: RawResultType): ResultDetail {
       title: r.service_title || undefined,
       description: r.service_description,
       affiliateLink: r.affiliate_link ?? undefined,
+      affiliateBanner: r.affiliate_banner || undefined,
     },
   };
 }
@@ -129,7 +131,7 @@ export async function getDiagnosisBySlug(slug: string): Promise<Diagnosis | null
     .select(`
       *,
       questions(id, display_order, text, choices(display_order, text, scores)),
-      result_types(id, score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_title, service_description, affiliate_link)
+      result_types(id, score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_title, service_description, affiliate_link, affiliate_banner)
     `)
     .eq("slug", slug)
     .single();

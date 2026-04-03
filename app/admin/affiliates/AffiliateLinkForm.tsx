@@ -8,16 +8,18 @@ interface Props {
   label: string;
   currentLink: string;
   currentServiceTitle: string;
+  currentBanner: string;
 }
 
-export default function AffiliateLinkForm({ resultTypeId, label, currentLink, currentServiceTitle }: Props) {
+export default function AffiliateLinkForm({ resultTypeId, label, currentLink, currentServiceTitle, currentBanner }: Props) {
   const [link, setLink] = useState(currentLink);
   const [serviceTitle, setServiceTitle] = useState(currentServiceTitle);
+  const [banner, setBanner] = useState(currentBanner);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
 
   async function handleSave() {
     setStatus("saving");
-    await updateAffiliateLink(resultTypeId, link, serviceTitle);
+    await updateAffiliateLink(resultTypeId, link, serviceTitle, banner);
     setStatus("saved");
     setTimeout(() => setStatus("idle"), 2000);
   }
@@ -33,14 +35,21 @@ export default function AffiliateLinkForm({ resultTypeId, label, currentLink, cu
           placeholder="サービスタイトル（例: あなたの強みを活かせるサービス）"
           className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
         />
-        <div className="flex items-center gap-2">
-          <input
-            type="url"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            placeholder="https://..."
-            className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
-          />
+        <input
+          type="url"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          placeholder="アフィリエイトURL（バナーなしの場合）https://..."
+          className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
+        />
+        <textarea
+          value={banner}
+          onChange={(e) => setBanner(e.target.value)}
+          placeholder="バナーHTML（A8.netなどのコードをそのまま貼り付け）"
+          rows={4}
+          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
+        />
+        <div className="flex justify-end">
           <button
             onClick={handleSave}
             disabled={status === "saving"}

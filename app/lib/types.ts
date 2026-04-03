@@ -25,6 +25,7 @@ export interface ResultDetail {
     title?: string;
     description: string;
     affiliateLink?: string;
+    affiliateBanner?: string;
   };
 }
 
