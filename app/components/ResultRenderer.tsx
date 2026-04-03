@@ -102,9 +102,11 @@ export default function ResultRenderer({
           <p className="mb-2 text-sm font-semibold text-slate-500">
             {detail.serviceProposal.title || "このタイプにおすすめのサービス"}
           </p>
-          <p className="mb-4 text-base leading-7 text-slate-800">
-            {detail.serviceProposal.description}
-          </p>
+          {!detail.serviceProposal.affiliateBanner && (
+            <p className="mb-4 text-base leading-7 text-slate-800">
+              {detail.serviceProposal.description}
+            </p>
+          )}
           {detail.serviceProposal.affiliateBanner ? (
             <div
               dangerouslySetInnerHTML={{ __html: detail.serviceProposal.affiliateBanner }}
