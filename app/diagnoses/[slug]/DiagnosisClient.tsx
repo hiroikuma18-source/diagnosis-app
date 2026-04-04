@@ -172,11 +172,13 @@ export default function DiagnosisClient({ diagnosis, otherDiagnoses }: Props) {
               const scoreKey = calculateResult(newAnswers);
               const label = diagnosis.resultMap[scoreKey] || "バランス型";
               setResultLabel(label);
-              fetch("/api/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ slug: diagnosis.slug }),
-              });
+              if (typeof window !== "undefined" && localStorage.getItem("is_owner") !== "1") {
+                fetch("/api/completions", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ slug: diagnosis.slug }),
+                });
+              }
             }
           }}
         />

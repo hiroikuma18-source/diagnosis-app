@@ -6,6 +6,7 @@ import { deleteDiagnosis } from "./actions";
 import DeleteButton from "./components/DeleteButton";
 import ExportButton from "./components/ExportButton";
 import AnalyticsStats from "./components/AnalyticsStats";
+import OwnerToggle from "./components/OwnerToggle";
 
 export default async function AdminPage() {
   const { data: diagnoses } = await supabase
@@ -13,9 +14,17 @@ export default async function AdminPage() {
     .select("id, slug, title, category_label, display_order")
     .order("display_order");
 
-  const { data: completions } = await supabase
+  const excludedIps = (process.env.EXCLUDED_IPS ?? "").split(",").map((ip) => ip.trim()).filter(Boolean);
+
+  let completionsQuery = supabase
     .from("diagnosis_completions")
     .select("diagnosis_id");
+
+  for (const ip of excludedIps) {
+    completionsQuery = completionsQuery.neq("ip_address", ip);
+  }
+
+  const { data: completions } = await completionsQuery;
 
   const completionCounts: Record<string, number> = {};
   for (const c of completions ?? []) {
@@ -26,7 +35,8 @@ export default async function AdminPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">診断一覧</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <OwnerToggle />
           <Link
             href="/admin/affiliates"
             className="rounded-full bg-violet-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
