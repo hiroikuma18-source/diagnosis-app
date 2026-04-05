@@ -6,10 +6,14 @@ export const dynamic = "force-dynamic";
 
 export default async function AffiliatesPage() {
   const db = getAdminClient();
-  const { data: diagnoses } = await db
+  const { data: diagnoses, error } = await db
     .from("diagnoses")
     .select("id, title, result_types(id, label, service_title, affiliate_links, affiliate_banner)")
     .order("display_order");
+
+  if (error) {
+    return <div className="p-8 text-red-600">エラー: {error.message}</div>;
+  }
 
   return (
     <div>
