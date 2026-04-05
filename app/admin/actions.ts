@@ -3,6 +3,7 @@
 import { getAdminClient } from "../lib/supabase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { AffiliateLink } from "../lib/types";
 
 export async function createDiagnosis(formData: FormData) {
   const db = getAdminClient();
@@ -115,7 +116,7 @@ export async function createResultType(diagnosisId: string, formData: FormData) 
     action_low_cost: formData.get("action_low_cost"),
     action_fastest: formData.get("action_fastest"),
     service_description: formData.get("service_description"),
-    affiliate_link: formData.get("affiliate_link") || null,
+    affiliate_links: [],
   });
 
   if (error) throw new Error(error.message);
@@ -130,12 +131,12 @@ export async function deleteResultType(resultTypeId: string, diagnosisId: string
   redirect(`/admin/diagnoses/${diagnosisId}/results`);
 }
 
-export async function updateAffiliateLink(resultTypeId: string, affiliateLink: string, serviceTitle: string, affiliateBanner: string) {
+export async function updateAffiliateLinks(resultTypeId: string, affiliateLinks: AffiliateLink[], serviceTitle: string, affiliateBanner: string) {
   const db = getAdminClient();
   const { error } = await db
     .from("result_types")
     .update({
-      affiliate_link: affiliateLink || null,
+      affiliate_links: affiliateLinks,
       service_title: serviceTitle,
       affiliate_banner: affiliateBanner,
     })

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Diagnosis, DiagnosisSummary, ResultDetail } from "../lib/types";
 
@@ -17,7 +19,7 @@ export default function ResultRenderer({
   onRetry,
 }: Props) {
   const shareText = `私は「${resultLabel}」タイプでした！あなたはどのタイプ？`;
-  const shareUrl = `https://diagnosis-app-xi.vercel.app/diagnoses/${diagnosis.slug}`;
+  const shareUrl = `${window.location.origin}/diagnoses/${diagnosis.slug}`;
 
   return (
     <main className="px-4 py-12">
@@ -111,15 +113,20 @@ export default function ResultRenderer({
             <div
               dangerouslySetInnerHTML={{ __html: detail.serviceProposal.affiliateBanner }}
             />
-          ) : detail.serviceProposal.affiliateLink ? (
-            <a
-              href={detail.serviceProposal.affiliateLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-            >
-              今すぐチェックする（無料）
-            </a>
+          ) : detail.serviceProposal.affiliateLinks.length > 0 ? (
+            <div className="flex flex-wrap gap-3">
+              {detail.serviceProposal.affiliateLinks.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           ) : null}
         </div>
 

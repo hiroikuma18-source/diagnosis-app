@@ -11,6 +11,11 @@ export interface Question {
   choices: Choice[];
 }
 
+export interface AffiliateLink {
+  url: string;
+  label: string;
+}
+
 export interface ResultDetail {
   description: string;
   reasons: string[];
@@ -24,7 +29,7 @@ export interface ResultDetail {
   serviceProposal: {
     title?: string;
     description: string;
-    affiliateLink?: string;
+    affiliateLinks: AffiliateLink[];
     affiliateBanner?: string;
   };
 }

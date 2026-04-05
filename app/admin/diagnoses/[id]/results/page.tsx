@@ -97,7 +97,6 @@ export default async function ResultsPage({ params }: PageProps) {
           </div>
 
           <Field label="サービス紹介文" name="service_description" placeholder="このタイプにおすすめのサービス説明" required />
-          <Field label="アフィリエイトリンク（任意）" name="affiliate_link" placeholder="https://..." />
 
           <button type="submit" className="w-full rounded-full bg-slate-900 py-3 text-sm font-semibold text-white transition hover:opacity-90">
             結果タイプを追加する

@@ -14,7 +14,10 @@ export async function POST(request: NextRequest) {
   if (!diagnosis) return NextResponse.json({ error: "not found" }, { status: 404 });
 
   const { error } = await supabase.from("diagnosis_completions").insert({ diagnosis_id: diagnosis.id });
-  if (error) console.error("completion insert error:", error);
+  if (error) {
+    console.error("completion insert error:", error);
+    return NextResponse.json({ error: "insert failed" }, { status: 500 });
+  }
 
   return NextResponse.json({ ok: true });
 }

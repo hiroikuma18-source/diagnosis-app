@@ -1,25 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { updateAffiliateLink } from "../actions";
+import { updateAffiliateLinks } from "../actions";
+import type { AffiliateLink } from "../../lib/types";
 
 interface Props {
   resultTypeId: string;
   label: string;
-  currentLink: string;
+  currentLinks: AffiliateLink[];
   currentServiceTitle: string;
   currentBanner: string;
 }
 
-export default function AffiliateLinkForm({ resultTypeId, label, currentLink, currentServiceTitle, currentBanner }: Props) {
-  const [link, setLink] = useState(currentLink);
+export default function AffiliateLinkForm({ resultTypeId, label, currentLinks, currentServiceTitle, currentBanner }: Props) {
+  const [links, setLinks] = useState<AffiliateLink[]>(currentLinks.length > 0 ? currentLinks : []);
   const [serviceTitle, setServiceTitle] = useState(currentServiceTitle);
   const [banner, setBanner] = useState(currentBanner);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
 
+  function addLink() {
+    setLinks((prev) => [...prev, { url: "", label: "今すぐチェックする（無料）" }]);
+  }
+
+  function removeLink(index: number) {
+    setLinks((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateLink(index: number, field: keyof AffiliateLink, value: string) {
+    setLinks((prev) => prev.map((link, i) => i === index ? { ...link, [field]: value } : link));
+  }
+
   async function handleSave() {
     setStatus("saving");
-    await updateAffiliateLink(resultTypeId, link, serviceTitle, banner);
+    await updateAffiliateLinks(resultTypeId, links, serviceTitle, banner);
     setStatus("saved");
     setTimeout(() => setStatus("idle"), 2000);
   }
@@ -35,13 +48,40 @@ export default function AffiliateLinkForm({ resultTypeId, label, currentLink, cu
           placeholder="サービスタイトル（例: あなたの強みを活かせるサービス）"
           className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
         />
-        <input
-          type="url"
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
-          placeholder="アフィリエイトURL（バナーなしの場合）https://..."
-          className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
-        />
+
+        <div className="space-y-2">
+          {links.map((link, i) => (
+            <div key={i} className="flex gap-2">
+              <input
+                type="text"
+                value={link.label}
+                onChange={(e) => updateLink(i, "label", e.target.value)}
+                placeholder="ボタンのラベル"
+                className="w-1/3 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
+              />
+              <input
+                type="url"
+                value={link.url}
+                onChange={(e) => updateLink(i, "url", e.target.value)}
+                placeholder="https://..."
+                className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700 outline-none focus:border-slate-400 focus:bg-white"
+              />
+              <button
+                onClick={() => removeLink(i)}
+                className="rounded-full px-3 py-2 text-xs text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+              >
+                削除
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={addLink}
+            className="rounded-full border border-dashed border-slate-300 px-4 py-2 text-xs text-slate-500 transition hover:border-slate-400 hover:text-slate-700"
+          >
+            + リンクを追加
+          </button>
+        </div>
+
         <textarea
           value={banner}
           onChange={(e) => setBanner(e.target.value)}

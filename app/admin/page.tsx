@@ -14,17 +14,9 @@ export default async function AdminPage() {
     .select("id, slug, title, category_label, display_order")
     .order("display_order");
 
-  const excludedIps = (process.env.EXCLUDED_IPS ?? "").split(",").map((ip) => ip.trim()).filter(Boolean);
-
-  let completionsQuery = supabase
+  const { data: completions } = await supabase
     .from("diagnosis_completions")
     .select("diagnosis_id");
-
-  for (const ip of excludedIps) {
-    completionsQuery = completionsQuery.neq("ip_address", ip);
-  }
-
-  const { data: completions } = await completionsQuery;
 
   const completionCounts: Record<string, number> = {};
   for (const c of completions ?? []) {

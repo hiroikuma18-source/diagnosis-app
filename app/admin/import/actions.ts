@@ -101,7 +101,7 @@ export async function importDiagnosis(formData: FormData): Promise<ImportResult>
         action_fastest: r.actionFastest ?? "",
         service_title: r.serviceTitle ?? "",
         service_description: r.serviceDescription ?? "",
-        affiliate_link: r.affiliateLink || null,
+        affiliate_links: r.affiliateLinks ?? [],
       });
 
       if (rError) return { success: false, error: `結果タイプの登録エラー: ${rError.message}` };
