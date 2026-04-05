@@ -12,10 +12,8 @@ type RawResultType = {
   action_free: string;
   action_low_cost: string;
   action_fastest: string;
-  service_title: string;
   service_description: string;
-  affiliate_links: { url: string; label: string }[];
-  affiliate_banner: string;
+  service_proposals: { title: string; link: string; linkLabel: string; banner: string }[];
 };
 
 type RawChoice = {
@@ -58,12 +56,8 @@ function toResultDetail(r: RawResultType): ResultDetail {
       lowCost: r.action_low_cost,
       fastest: r.action_fastest,
     },
-    serviceProposal: {
-      title: r.service_title || undefined,
-      description: r.service_description,
-      affiliateLinks: r.affiliate_links ?? [],
-      affiliateBanner: r.affiliate_banner || undefined,
-    },
+    serviceDescription: r.service_description,
+    serviceProposals: r.service_proposals ?? [],
   };
 }
 
@@ -131,7 +125,7 @@ export async function getDiagnosisBySlug(slug: string): Promise<Diagnosis | null
     .select(`
       *,
       questions(id, display_order, text, choices(display_order, text, scores)),
-      result_types(id, score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_title, service_description, affiliate_links, affiliate_banner)
+      result_types(id, score_key, label, description, reasons, failure_pattern, seven_day_plan, action_free, action_low_cost, action_fastest, service_description, service_proposals)
     `)
     .eq("slug", slug)
     .single();

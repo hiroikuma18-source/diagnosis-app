@@ -99,9 +99,8 @@ export async function importDiagnosis(formData: FormData): Promise<ImportResult>
         action_free: r.actionFree ?? "",
         action_low_cost: r.actionLowCost ?? "",
         action_fastest: r.actionFastest ?? "",
-        service_title: r.serviceTitle ?? "",
         service_description: r.serviceDescription ?? "",
-        affiliate_links: r.affiliateLinks ?? [],
+        service_proposals: r.serviceProposals ?? [],
       });
 
       if (rError) return { success: false, error: `結果タイプの登録エラー: ${rError.message}` };

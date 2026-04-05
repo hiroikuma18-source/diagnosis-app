@@ -100,35 +100,32 @@ export default function ResultRenderer({
         </div>
 
         {/* ⑥ サービス提案 */}
-        <div className="rounded-[28px] bg-gradient-to-br from-rose-50 to-sky-50 p-6 ring-1 ring-slate-200">
-          <p className="mb-2 text-sm font-semibold text-slate-500">
-            {detail.serviceProposal.title || "このタイプにおすすめのサービス"}
-          </p>
-          {!detail.serviceProposal.affiliateBanner && (
-            <p className="mb-4 text-base leading-7 text-slate-800">
-              {detail.serviceProposal.description}
-            </p>
-          )}
-          {detail.serviceProposal.affiliateBanner ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: detail.serviceProposal.affiliateBanner }}
-            />
-          ) : detail.serviceProposal.affiliateLinks.length > 0 ? (
-            <div className="flex flex-wrap gap-3">
-              {detail.serviceProposal.affiliateLinks.map((link, i) => (
-                <a
-                  key={i}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          ) : null}
-        </div>
+        {(detail.serviceDescription || detail.serviceProposals.length > 0) && (
+          <div className="space-y-4">
+            {detail.serviceDescription && (
+              <p className="px-2 text-sm text-slate-500">{detail.serviceDescription}</p>
+            )}
+            {detail.serviceProposals.map((proposal, i) => (
+              <div key={i} className="rounded-[28px] bg-gradient-to-br from-rose-50 to-sky-50 p-6 ring-1 ring-slate-200">
+                {proposal.title && (
+                  <p className="mb-3 text-sm font-semibold text-slate-500">{proposal.title}</p>
+                )}
+                {proposal.banner ? (
+                  <div dangerouslySetInnerHTML={{ __html: proposal.banner }} />
+                ) : proposal.link ? (
+                  <a
+                    href={proposal.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+                  >
+                    {proposal.linkLabel || "今すぐチェックする（無料）"}
+                  </a>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* シェア */}
         <div className="rounded-[28px] bg-white p-6 text-center ring-1 ring-slate-200">

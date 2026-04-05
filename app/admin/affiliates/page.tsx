@@ -8,7 +8,7 @@ export default async function AffiliatesPage() {
   const db = getAdminClient();
   const { data: diagnoses } = await db
     .from("diagnoses")
-    .select("id, title, result_types(id, label, service_title, affiliate_links, affiliate_banner)")
+    .select("id, title, result_types(id, label, service_description, service_proposals)")
     .order("display_order");
 
   return (
@@ -30,9 +30,7 @@ export default async function AffiliatesPage() {
                   key={r.id}
                   resultTypeId={r.id}
                   label={r.label}
-                  currentLinks={r.affiliate_links ?? []}
-                  currentServiceTitle={r.service_title ?? ""}
-                  currentBanner={r.affiliate_banner ?? ""}
+                  currentProposals={r.service_proposals ?? []}
                 />
               ))}
             </div>

@@ -11,9 +11,11 @@ export interface Question {
   choices: Choice[];
 }
 
-export interface AffiliateLink {
-  url: string;
-  label: string;
+export interface ServiceProposal {
+  title: string;
+  link: string;
+  linkLabel: string;
+  banner: string;
 }
 
 export interface ResultDetail {
@@ -26,12 +28,8 @@ export interface ResultDetail {
     lowCost: string;
     fastest: string;
   };
-  serviceProposal: {
-    title?: string;
-    description: string;
-    affiliateLinks: AffiliateLink[];
-    affiliateBanner?: string;
-  };
+  serviceDescription: string;
+  serviceProposals: ServiceProposal[];
 }
 
 export interface Diagnosis {
