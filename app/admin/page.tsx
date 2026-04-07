@@ -23,6 +23,15 @@ export default async function AdminPage() {
     completionCounts[c.diagnosis_id] = (completionCounts[c.diagnosis_id] ?? 0) + 1;
   }
 
+  const { data: clicks } = await supabase
+    .from("affiliate_clicks")
+    .select("diagnosis_slug");
+
+  const clickCounts: Record<string, number> = {};
+  for (const c of clicks ?? []) {
+    clickCounts[c.diagnosis_slug] = (clickCounts[c.diagnosis_slug] ?? 0) + 1;
+  }
+
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -69,6 +78,9 @@ export default async function AdminPage() {
                 <span className="ml-3 text-xs text-slate-400">/{d.slug}</span>
                 <span className="ml-3 text-xs text-emerald-600">
                   完了数: {completionCounts[d.id] ?? 0}
+                </span>
+                <span className="ml-3 text-xs text-violet-500">
+                  クリック数: {clickCounts[d.slug] ?? 0}
                 </span>
                 <AnalyticsStats slug={d.slug} />
               </div>
