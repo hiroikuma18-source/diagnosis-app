@@ -117,6 +117,18 @@ export default function ResultRenderer({
                     href={proposal.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      if (localStorage.getItem("is_owner") === "1") return;
+                      fetch("/api/affiliate-clicks", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          link_url: proposal.link,
+                          link_label: proposal.linkLabel || "今すぐチェックする（無料）",
+                          diagnosis_slug: diagnosis.slug,
+                        }),
+                      });
+                    }}
                     className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
                   >
                     {proposal.linkLabel || "今すぐチェックする（無料）"}

@@ -11,6 +11,15 @@ export default async function AffiliatesPage() {
     .select("id, title, result_types(id, label, service_description, service_proposals)")
     .order("display_order");
 
+  const { data: clicks } = await db
+    .from("affiliate_clicks")
+    .select("link_url");
+
+  const clickCounts: Record<string, number> = {};
+  for (const c of clicks ?? []) {
+    clickCounts[c.link_url] = (clickCounts[c.link_url] ?? 0) + 1;
+  }
+
   return (
     <div>
       <div className="mb-6 flex items-center gap-4">
@@ -31,6 +40,7 @@ export default async function AffiliatesPage() {
                   resultTypeId={r.id}
                   label={r.label}
                   currentProposals={r.service_proposals ?? []}
+                  clickCounts={clickCounts}
                 />
               ))}
             </div>

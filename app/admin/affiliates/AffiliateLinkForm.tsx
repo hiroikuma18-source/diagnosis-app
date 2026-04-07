@@ -8,6 +8,7 @@ interface Props {
   resultTypeId: string;
   label: string;
   currentProposals: ServiceProposal[];
+  clickCounts: Record<string, number>;
 }
 
 const emptyProposal = (): ServiceProposal => ({
@@ -17,7 +18,7 @@ const emptyProposal = (): ServiceProposal => ({
   banner: "",
 });
 
-export default function AffiliateLinkForm({ resultTypeId, label, currentProposals }: Props) {
+export default function AffiliateLinkForm({ resultTypeId, label, currentProposals, clickCounts }: Props) {
   const [proposals, setProposals] = useState<ServiceProposal[]>(currentProposals);
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle");
 
@@ -47,7 +48,14 @@ export default function AffiliateLinkForm({ resultTypeId, label, currentProposal
         {proposals.map((proposal, i) => (
           <div key={i} className="rounded-xl border border-slate-200 p-3 space-y-2">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-slate-500">サービス提案 {i + 1}</p>
+              <div className="flex items-center gap-3">
+                <p className="text-xs font-medium text-slate-500">サービス提案 {i + 1}</p>
+                {proposal.link && (
+                  <span className="text-xs text-emerald-600">
+                    クリック数: {clickCounts[proposal.link] ?? 0}
+                  </span>
+                )}
+              </div>
               <button
                 onClick={() => removeProposal(i)}
                 className="text-xs text-slate-400 transition hover:text-red-500"
